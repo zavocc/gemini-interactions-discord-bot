@@ -12,3 +12,9 @@ wheels/
 # Sensitive information
 .env
 .env.*
+
+# Conversations
+conversations/
+
+# Runtime downloads
+.tmp/
