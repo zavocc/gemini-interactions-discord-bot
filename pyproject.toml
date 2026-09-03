@@ -1,0 +1,31 @@
+[project]
+name = "gemini-interactions-discordbot"
+version = "0.1.0"
+description = "Run Gemini as Discord bot"
+readme = "README.md"
+authors = [
+    { name = "zavocc", email = "buffer.0verfl0w1030@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "dotenv>=0.9.9",
+    "google-genai>=2.22.0",
+    "py-cord>=2.8.1",
+]
+
+[project.scripts]
+start = "gemini_interactions_discordbot.main:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.basedpyright]
+extraPaths = ["src"]
+reportUntypedFunctionDecorator = false
+reportUnknownMemberType = false
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.5",
+]
