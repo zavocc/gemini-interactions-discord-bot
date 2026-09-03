@@ -131,6 +131,9 @@ class GoogleAgent:
             input=input_prompts,
             previous_interaction_id=thread_id,
             system_instruction=SYSTEM_INSTRUCTIONS,
+            generation_config={
+                "thinking_level": "low"
+            },
             stream=False
         )
 
