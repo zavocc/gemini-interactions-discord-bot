@@ -415,6 +415,7 @@ dependencies = [
     { name = "dotenv" },
     { name = "google-genai" },
     { name = "py-cord" },
+    { name = "pydantic" },
 ]
 
 [package.dev-dependencies]
@@ -429,6 +430,7 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "google-genai", specifier = ">=2.22.0" },
     { name = "py-cord", specifier = ">=2.8.1" },
+    { name = "pydantic", specifier = ">=2.13.5" },
 ]
 
 [package.metadata.requires-dev]

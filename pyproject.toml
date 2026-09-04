@@ -12,6 +12,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "google-genai>=2.22.0",
     "py-cord>=2.8.1",
+    "pydantic>=2.13.5",
 ]
 
 [project.scripts]

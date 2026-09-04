@@ -1,0 +1,6 @@
+{
+  "model": "gemini-3.8-flash",
+  "service_tier": "flex",
+  "reasoning_effort": "low",
+  "web_search": true
+}

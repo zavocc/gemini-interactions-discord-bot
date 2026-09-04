@@ -3,6 +3,7 @@ import google.genai
 from google.genai.interactions import Interaction
 
 from gemini_interactions_discordbot import BotClient
+from gemini_interactions_discordbot.gemini.config import load_config
 from gemini_interactions_discordbot.gemini.files import upload_file
 from gemini_interactions_discordbot.gemini.threads import (
     load_thread_id,
@@ -81,6 +82,9 @@ class GoogleAgent:
         # Load thread_id for the user
         thread_id = await load_thread_id(self.context.author.id)
 
+        # Load config
+        loaded_config = await load_config()
+
         # if the prompt is empty, use the default prompt
         if not prompt:
             prompt = "No text provided"
@@ -126,15 +130,22 @@ class GoogleAgent:
                         'mime_type': attachment.content_type
                     })
 
+        # Tools
+        tools = []
+        if loaded_config.web_search:
+            tools.append({'type': 'google_search'})
+
         response: Interaction = await self.genai_client.aio.interactions.create(  # pyright: ignore[reportAssignmentType]
-            model="gemini-3.8-flash",
-            input=input_prompts,
+            model=loaded_config.model,
+            service_tier=loaded_config.service_tier,
+            generation_config={
+                "thinking_level": loaded_config.reasoning_effort
+            },
+            tools=tools,
+            stream=False,
             previous_interaction_id=thread_id,
             system_instruction=SYSTEM_INSTRUCTIONS,
-            generation_config={
-                "thinking_level": "low"
-            },
-            stream=False
+            input=input_prompts,
         )
 
         if not response.id:
