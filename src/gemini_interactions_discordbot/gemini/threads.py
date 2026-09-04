@@ -4,8 +4,10 @@ from pathlib import Path
 from typing import cast
 
 import aiofiles
+import aiofiles.os
 
-THREADS_DIR = Path("conversations")
+# TODO: ensure conversations dir is placed in root project, right now its based on whatever the user is in CWD
+THREADS_DIR = Path.cwd() / "conversations"
 
 async def load_thread_id(user_id: int) -> str | None:
     try:
@@ -35,6 +37,6 @@ async def save_thread_id(user_id: int, thread_id: str) -> None:
 
 async def clear_thread_id(user_id: int) -> None:
     try:
-        (THREADS_DIR / f"{user_id}.json").unlink()
+        await aiofiles.os.remove(THREADS_DIR / f"{user_id}.json")
     except FileNotFoundError:
         pass

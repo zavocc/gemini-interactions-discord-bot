@@ -3,15 +3,27 @@ from discord.ext import commands
 
 from gemini_interactions_discordbot import BotClient
 from gemini_interactions_discordbot.gemini import Agent
+from gemini_interactions_discordbot.gemini.threads import clear_thread_id
 
 
 # message chunker, splits messages to list
 def chunk_message(message: str, chunk_size: int = 2000) -> list[str]:
-    return [message[i:i + chunk_size] for i in range(0, len(message), chunk_size)]
+    return [message[i : i + chunk_size] for i in range(0, len(message), chunk_size)]
+
 
 class EventListeners(commands.Cog):
-    def __init__(self, bot: BotClient): # pyright: ignore[reportMissingSuperCall]
+    def __init__(self, bot: BotClient):  # pyright: ignore[reportMissingSuperCall]
         self.bot: BotClient = bot
+
+    # clear message
+    @commands.slash_command(description="Clear your messages")
+    async def clear(self, ctx: discord.ApplicationContext):
+        # defer and ephemeral
+        _ = await ctx.defer(ephemeral=True)
+
+        # clear
+        _ = await clear_thread_id(ctx.author.id)
+        _ = await ctx.respond("Messages cleared.")
 
     # on_message
     @commands.Cog.listener()
@@ -35,8 +47,11 @@ class EventListeners(commands.Cog):
             for chunk in chunk_message(response):
                 _ = await message.channel.send(chunk)
         except Exception:
-            _ = await message.channel.send(f"<@{message.author.id}> an error occurred when generating a response.")
+            _ = await message.channel.send(
+                f"<@{message.author.id}> an error occurred when generating a response."
+            )
             raise
+
 
 def setup(bot: BotClient):
     bot.add_cog(EventListeners(bot))
